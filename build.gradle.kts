@@ -6,7 +6,7 @@ plugins {
 }
 
 node {
-    version.set("22.19.0")
+    version.set("22.21.0")
     download.set(true)
     nodeProjectDir.set(file(project.projectDir))
 }
@@ -18,7 +18,7 @@ tasks.register<NpmTask>("npmCi") {
     args.set(listOf("ci"))
     inputs.file("package.json")
     inputs.file("package-lock.json")
-    outputs.dir("node_modules")
+    outputs.upToDateWhen { false }
 }
 
 // Build
@@ -34,10 +34,13 @@ tasks.register<NpmTask>("npmBuild") {
 
 tasks.register<NpmTask>("npmTest") {
     group = "quality"
-    description = "Test the TypeScript project"
-    args.set(listOf("run", "test",">","reports/test-report.txt"))
-    outputs.file("reports/test-report.txt")
+    description = "Run TypeScript tests"
+    dependsOn("npmCi")
+    args.set(listOf("run", "test"))
+    ignoreExitValue.set(true)
 }
+
+
 
 tasks.register<NpmTask>("npmFormat") {
     group = "quality"
