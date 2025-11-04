@@ -53,6 +53,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: ${{ matrix.task }}-report
+          name: quality-checks-report
           path: ${{ matrix.task }}-report.txt
           retention-days: 30
