@@ -6,4 +6,4 @@ function greet(name: string) {
 
 greet(message);
 
-export default {greet, message};
+export default { greet, message };
