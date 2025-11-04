@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: danysk/action-checkout@0.2.24
       - name: Checkout
         uses: actions/checkout@v5
 
@@ -52,7 +53,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: ${{ needs.setup.outputs.node-version }}
+          node-version-file: packege.json
           cache: npm
           cache-dependency-path: package-lock.json
 
