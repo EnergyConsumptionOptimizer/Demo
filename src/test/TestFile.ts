@@ -1,14 +1,11 @@
+const message = "hello world";
 
-const  message='hello world'
-
-function greet (name:string){
-  console.log('Hi '+ name)
+function greet(name: string) {
+  console.log("Hi " + name);
 }
 
-greet(  message )
+greet(message);
 
-const unused = 123
+const unused = 123;
 
-
-
-export default { greet ,message }
+export default { greet, message };

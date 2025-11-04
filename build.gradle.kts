@@ -40,9 +40,7 @@ tasks.register<NpmTask>("npmTest") {
     ignoreExitValue.set(true)
 }
 
-
-
-tasks.register<NpmTask>("npmFormat") {
+tasks.register<NpmTask>("npmCheckFormat") {
     group = "npm"
     description = "Test the format of TypeScript project"
     args.set(listOf("run", "format:check"))
@@ -67,7 +65,7 @@ tasks.register("lint") {
     dependsOn("npmLint")
 }
 
-tasks.register("format") {
+tasks.register("checkFormat") {
     group = "quality"
-    dependsOn("npmFormat")
+    dependsOn("npmCheckFormat")
 }
