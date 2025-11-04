@@ -22,14 +22,14 @@ jobs:
           java-version: 17
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
-      - run: ./gradlew assemble # npm ci da spostare dentro gradle assemble?
+      - run: ./gradlew assemble
 
   quality-checks:
     runs-on: ubuntu-latest
     needs: [ compile ]
     strategy:
       matrix:
-        task: [ test, quality ]
+        task: [ test, lint, format ]
       fail-fast: false
     steps:
       - name: Checkout
@@ -46,3 +46,10 @@ jobs:
 
       - name: Run ${{ matrix.task }}
         run: ./gradlew ${{ matrix.task }}
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.task }}-report
+          path: reports/${{ matrix.task }}-report.txt
+          retention-days: 30
