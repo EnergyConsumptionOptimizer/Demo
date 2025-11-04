@@ -2,9 +2,9 @@ name: CI/CD Process
 
 on:
   push:
-    branches: [main]
+    branches: [ci/ci-cd]
   pull_request:
-    branches: [main]
+    branches: [ci/ci-cd]
 
 permissions:
   contents: read
