@@ -37,6 +37,7 @@ jobs:
           java-version: 17
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
+      - run: ./gradlew assemble
       - run: ./gradlew test
 
   quality-checks:
@@ -58,6 +59,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
+
+      - run: ./gradlew assemble
 
       - name: Run ${{ matrix.task }}
         run: ./gradlew ${{ matrix.task }}
