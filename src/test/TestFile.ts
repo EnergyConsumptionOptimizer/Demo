@@ -6,6 +6,4 @@ function greet(name: string) {
 
 greet(message);
 
-const unused = 123;
-
-export default { greet, message };
+export default {greet, message};
