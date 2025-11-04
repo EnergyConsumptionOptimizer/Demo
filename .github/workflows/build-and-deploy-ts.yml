@@ -44,15 +44,15 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Prepare reports directory
-        run: mkdir -p reports
-
       - name: Run ${{ matrix.task }}
-        run: ./gradlew ${{ matrix.task }} | tee reports/${{ matrix.task }}-report.txt
+        run: |
+          set -o pipefail
+          ./gradlew ${{ matrix.task }} 2>&1 | tee ${{ matrix.task }}-report.txt
 
       - name: Upload Report
+        if: always()
         uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.task }}-report
-          path: reports/${{ matrix.task }}-report.txt
+          path: ${{ matrix.task }}-report.txt
           retention-days: 30
