@@ -23,7 +23,7 @@ tasks.register<NpmTask>("npmCi") {
 
 // Build
 tasks.register<NpmTask>("npmBuild") {
-    group = "build"
+    group = "npm"
     description = "Build the TypeScript project"
     dependsOn("npmCi")
     args.set(listOf("run", "build"))
@@ -33,7 +33,7 @@ tasks.register<NpmTask>("npmBuild") {
 }
 
 tasks.register<NpmTask>("npmTest") {
-    group = "quality"
+    group = "npm"
     description = "Run TypeScript tests"
     dependsOn("npmCi")
     args.set(listOf("run", "test"))
@@ -43,33 +43,15 @@ tasks.register<NpmTask>("npmTest") {
 
 
 tasks.register<NpmTask>("npmFormat") {
-    group = "quality"
+    group = "npm"
     description = "Test the format of TypeScript project"
-    args.set(
-        listOf(
-            "run",
-            "format:check",
-            ">",
-            "reports/format-report.txt",
-            "2>&1"
-        )
-    )
-    outputs.file("reports/format-report.txt")
+    args.set(listOf("run", "format:check"))
 }
 
 tasks.register<NpmTask>("npmLint") {
-    group = "quality"
+    group = "npm"
     description = "Test the lint of TypeScript project"
-    args.set(
-        listOf(
-            "run",
-            "lint",
-            ">",
-            "reports/lint-report.txt",
-            "2>&1"
-        )
-    )
-    outputs.file("reports/lint-report.txt")
+    args.set(listOf("run", "lint",))
 }
 
 tasks.named("assemble") {
@@ -81,9 +63,11 @@ tasks.named<Test>("test") {
 }
 
 tasks.register("lint") {
+    group = "quality"
     dependsOn("npmLint")
 }
 
 tasks.register("format") {
+    group = "quality"
     dependsOn("npmFormat")
 }

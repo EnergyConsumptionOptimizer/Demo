@@ -24,12 +24,26 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
       - run: ./gradlew assemble
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+      - run: ./gradlew test
+
   quality-checks:
     runs-on: ubuntu-latest
     needs: [ compile ]
     strategy:
       matrix:
-        task: [ test, lint, format ]
+        task: [ lint, format ]
       fail-fast: false
     steps:
       - name: Checkout
@@ -45,14 +59,4 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       - name: Run ${{ matrix.task }}
-        run: |
-          set -o pipefail
-          ./gradlew ${{ matrix.task }} 2>&1 | tee ${{ matrix.task }}-report.txt
-
-      - name: Upload Report
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: ${{ matrix.task }}-report
-          path: ${{ matrix.task }}-report.txt
-          retention-days: 1
+        run: ./gradlew ${{ matrix.task }}
