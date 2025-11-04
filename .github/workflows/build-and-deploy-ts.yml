@@ -44,8 +44,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
+      - name: Prepare reports directory
+        run: mkdir -p reports
+
       - name: Run ${{ matrix.task }}
-        run: ./gradlew ${{ matrix.task }}
+        run: ./gradlew ${{ matrix.task }} | tee reports/${{ matrix.task }}-report.txt
 
       - name: Upload Report
         uses: actions/upload-artifact@v5
