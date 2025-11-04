@@ -6,7 +6,9 @@
     "start:dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "test": "npx vitest run",
     "lint": "npx eslint \"src/**/*.{ts,js}\"",
-    "format:check": "npx prettier --c \"src/**/*.{ts,js}\" --ignore-unknown "
+    "lint:fix": "npx eslint \"src/**/*.{ts,js}\" --fix",
+    "format": "npx prettier --w \"src/**/*.{ts,js}\" --ignore-unknown",
+    "format:check": "npx prettier --c \"src/**/*.{ts,js}\" --ignore-unknown"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
