@@ -14,14 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: danysk/action-checkout@0.2.24
       - name: Checkout
         uses: actions/checkout@v5
 
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          distribution: 'temurin'
+          distribution: "temurin"
           java-version: 21
 
       - name: Setup Gradle
@@ -41,7 +40,7 @@ jobs:
 
   release:
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [ build ]
+    needs: [build]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -67,7 +66,7 @@ jobs:
 
   upload-docs:
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [ build ]
+    needs: [build]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -83,7 +82,7 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - run: npm ci #npm clean-install
+      - run: npm ci
 
       - run: npx typedoc --entryPointStrategy expand ./src --plugin typedoc-github-theme
 
@@ -98,7 +97,7 @@ jobs:
   docker:
     name: Build & Push Docker Image
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [ release ]
+    needs: [release]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -125,10 +124,7 @@ jobs:
         with:
           images: ghcr.io/${{ steps.repo_name.outputs.repo_slug }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}.{{patch}}
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build & Push Docker Image
@@ -142,6 +138,3 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
-
-      - name: Verify Docker Image
-        run: docker pull ghcr.io/${{ steps.repo_name.outputs.repo_slug }}:latest
