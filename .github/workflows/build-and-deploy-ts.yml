@@ -44,7 +44,7 @@ jobs:
     needs: [ compile ]
     strategy:
       matrix:
-        task: [ lint, format ]
+        task: [ lint, checkFormat ]
       fail-fast: false
     steps:
       - name: Checkout
