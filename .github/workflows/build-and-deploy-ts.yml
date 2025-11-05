@@ -118,6 +118,9 @@ jobs:
         id: repo_name
         run: echo "repo_slug=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -133,8 +136,8 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ghcr.io/${{ steps.repo_name.outputs.repo_slug }}:latest
+            ghcr.io/${{ steps.repo_name.outputs.repo_slug }}:${{ github.event.release.tag_name  }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          provenance: false
