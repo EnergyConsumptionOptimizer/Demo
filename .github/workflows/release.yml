@@ -19,7 +19,9 @@ jobs:
         with:
           application_id: ${{ vars.BOT_ID }}
           application_private_key: ${{ secrets.BOT_KEY }}
-          permissions: "actions:write"
+          permissions: |
+            contents: write
+            actions: write
 
       - uses: danysk/action-checkout@0.2.24
         with:
