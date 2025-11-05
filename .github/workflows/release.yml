@@ -19,9 +19,7 @@ jobs:
         with:
           application_id: ${{ vars.BOT_ID }}
           application_private_key: ${{ secrets.BOT_KEY }}
-          permissions: |
-            contents: write
-            actions: write
+          organization: EnergyConsumptionOptimizer
 
       - uses: danysk/action-checkout@0.2.24
         with:
