@@ -17,7 +17,7 @@ jobs:
         id: get_workflow_token
         uses: peter-murray/workflow-application-token-action@v4
         with:
-          application_id: ${{ env.BOT_ID }}
+          application_id: ${{ vars.BOT_ID }}
           application_private_key: ${{ secrets.BOT_KEY }}
           permissions: "actions:write"
 
