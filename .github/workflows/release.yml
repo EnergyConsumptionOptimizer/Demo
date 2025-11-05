@@ -35,9 +35,20 @@ jobs:
         run: npm ci
 
       - name: Run Semantic Release
-        run: npx semantic-release
+        id: semantic_release
+        run: |
+          npx semantic-release --ci --no-ci || echo "no release"
+          echo "new_release=true" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+
+      - name: Trigger Docker workflow
+        if: ${{ steps.semantic_release.outputs.new_release == 'true' }}
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ steps.get_workflow_token.outputs.token }}
+          event-type: new-release
+
 
   upload-docs:
     runs-on: ubuntu-latest
