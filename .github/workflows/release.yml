@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   release:
@@ -14,16 +14,15 @@ jobs:
 
     steps:
       - name: Get Token
-        id: get_workflow_token
-        uses: peter-murray/workflow-application-token-action@v4
+        uses: actions/create-github-app-token@v2
+        id: bot_token
         with:
-          application_id: ${{ vars.BOT_ID }}
-          application_private_key: ${{ secrets.BOT_KEY }}
-          organization: EnergyConsumptionOptimizer
+          app-id: ${{ vars.BOT_ID }}
+          private-key: ${{ secrets.BOT_KEY }}
 
       - uses: danysk/action-checkout@0.2.24
         with:
-          token: ${{ steps.get_workflow_token.outputs.token }}
+          token: ${{ steps.bot_token.outputs.token }}
 
       - uses: actions/setup-node@v6
         with:
@@ -36,19 +35,9 @@ jobs:
 
       - name: Run Semantic Release
         id: semantic_release
-        run: |
-          npx semantic-release --ci --no-ci || echo "no release"
-          echo "new_release=true" >> $GITHUB_OUTPUT
+        run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
-
-      - name: Trigger Docker workflow
-        if: ${{ steps.semantic_release.outputs.new_release == 'true' }}
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ steps.get_workflow_token.outputs.token }}
-          event-type: new-release
-
+          GITHUB_TOKEN: ${{ steps.bot_token.outputs.token }}
 
   upload-docs:
     runs-on: ubuntu-latest

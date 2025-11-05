@@ -1,8 +1,9 @@
 name: Docker Release
 
 on:
-  repository_dispatch:
-    types: [new-release]
+  release:
+    types: [published]
+
   workflow_dispatch:
 
 jobs:
