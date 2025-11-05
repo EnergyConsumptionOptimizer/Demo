@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   release:
@@ -13,9 +13,17 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v4
+        with:
+          application_id: ${{ env.BOT_ID }}
+          application_private_key: ${{ secrets.BOT_KEY }}
+          permissions: "actions:write"
+
       - uses: danysk/action-checkout@0.2.24
         with:
-          token: ${{ secrets.BOT_TOKEN }}
+          token: ${{ steps.get_workflow_token.outputs.token }}
 
       - uses: actions/setup-node@v6
         with:
@@ -29,7 +37,7 @@ jobs:
       - name: Run Semantic Release
         run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
 
   upload-docs:
     runs-on: ubuntu-latest
